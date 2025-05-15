@@ -22,7 +22,7 @@ Gerenciar computadores, mouses, teclados e celulares, vinculando cada periféric
 - IP (quando aplicável)
 - Nome
 - Modelo
-- Status (ativo, reserva, danificado)
+- Status (ativo/inativo, reserva, danificado)
 - Colaborador responsável
 
 ## 📁 Funcionalidades

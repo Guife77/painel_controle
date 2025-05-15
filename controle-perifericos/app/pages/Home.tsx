@@ -1,10 +1,9 @@
-export default function Home() {
-    // Dummy handlers for demonstration
-    const showPage = (page: string) => {
-        // Implement navigation logic here
-        alert(`Navigate to: ${page}`);
-    };
+interface Props {
+  setPage: (page: string) => void;
+}
 
+export default function Home({ setPage }: Props) {
+     
     return (
         <div className="flex-1 relative">
             {/* Top Bar */}
@@ -40,19 +39,19 @@ export default function Home() {
                                 </p>
                                 <div className="flex flex-wrap gap-3">
                                     <button
-                                        className="btn-primary bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md flex items-center"
-                                        onClick={() => showPage('employees')}>
-                                        <i className="fas fa-user-plus mr-2"></i> Cadastrar Colaborador
+                                        className="btn-primary bg-blue-600 text-white px-5 py-2 rounded-md flex items-center gap-2 shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                                        onClick={() => setPage('employees')}>
+                                        <i className="fas fa-user-plus mr-2 "></i> Cadastrar Colaborador
                                     </button>
                                     <button
-                                        className="btn-primary bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md flex items-center"
-                                        onClick={() => showPage('devices')}
+                                        className="btn-primary bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md flex items-center gap-2 shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                                        onClick={() => setPage('devices')}
                                     >
                                         <i className="fas fa-laptop mr-2"></i> Cadastrar Periférico
                                     </button>
                                     <button
-                                        className="btn-primary bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md flex items-center"
-                                        onClick={() => showPage('reports')}
+                                        className="btn-primary bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-md flex items-center gap-2 shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+                                        onClick={() => setPage('reports')}
                                     >
                                         <i className="fas fa-file-alt mr-2"></i> Ver Relatórios
                                     </button>
@@ -78,7 +77,7 @@ export default function Home() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className="bg-white rounded-lg shadow-md p-6">
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-lg font-semibold text-gray-800">Computadores</h3>
+                                <h3 className="text-lg font-semibold text-gray-800 ">Computadores</h3>
                                 <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
                                     <i className="fas fa-desktop text-blue-600 text-xl"></i>
                                 </div>

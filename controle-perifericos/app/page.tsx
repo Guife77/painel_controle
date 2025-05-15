@@ -10,14 +10,20 @@ import Reports from './pages/Reports';
 export default function Page() {
   const [page, setPage] = useState('home');
 
+  const renderPage = () => {
+    switch (page) {
+      case 'employees': return <Employees />;
+      case 'devices': return <Devices />;
+      case 'reports': return <Reports />;
+      default: return <Home setPage={setPage} />;
+    }
+  };
+
   return (
     <div className="flex min-h-screen">
       <Sidebar setPage={setPage} />
       <main className="flex-1 ml-64 p-6">
-        {page === 'home' && <Home />}
-        {page === 'employees' && <Employees />}
-        {page === 'devices' && <Devices />}
-        {page === 'reports' && <Reports />}
+        {renderPage()}
       </main>
     </div>
   );

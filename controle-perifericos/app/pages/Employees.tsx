@@ -1,0 +1,1 @@
+<div><h2 className='text-xl font-bold'>Cadastro de Colaboradores</h2></div>

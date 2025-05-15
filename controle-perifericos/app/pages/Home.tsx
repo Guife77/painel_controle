@@ -1,0 +1,1 @@
+<div><h2 className='text-xl font-bold'>Página Inicial</h2></div>

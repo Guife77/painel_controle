@@ -1,52 +1,104 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase';
 
 interface ReportDevice {
   id: number;
-  type: string;
-  model: string;
-  assetNumber: string;
-  name: string;
+  tipo: string;
+  modelo: string;
+  patrimonio: string;
+  nome: string;
   status: string;
-  employee: string;
-  department?: string;
+  colaborador: string;
+  departamento?: string;
+}
+
+interface Employee {
+  id: number;
+  nome: string;
+  departamento: string;
+  email: string;
+  status: string;
 }
 
 export default function Reports() {
   const [devices, setDevices] = useState<ReportDevice[]>([]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
   const [typeFilter, setTypeFilter] = useState('');
   const [employeeFilter, setEmployeeFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
 
   useEffect(() => {
-    const stored = localStorage.getItem('devices');
-    if (stored) {
-      setDevices(JSON.parse(stored));
+    async function fetchData() {
+      // Busca dispositivos com vínculo ao colaborador
+      const { data: deviceData, error: deviceError } = await supabase
+        .from('devices')
+        .select(`
+          id,
+          tipo,
+          modelo,
+          patrimonio,
+          nome,
+          status,
+          employees:colaborador_id (
+            nome,
+            departamento
+          )
+        `);
+
+      if (deviceError) {
+        console.error('Erro ao buscar devices:', deviceError);
+      } else {
+        const mappedDevices: ReportDevice[] = deviceData.map((d: any) => ({
+          id: d.id,
+          tipo: d.tipo,
+          modelo: d.modelo,
+          patrimonio: d.patrimonio,
+          nome: d.nome,
+          status: d.status,
+          colaborador: d.employees?.nome || '',
+          departamento: d.employees?.departamento || '',
+        }));
+        setDevices(mappedDevices);
+      }
+
+      // Busca lista de todos os colaboradores
+      const { data: employeeData, error: employeeError } = await supabase
+        .from('employees')
+        .select('id, nome, departamento, email, status');
+
+      if (employeeError) {
+        console.error('Erro ao buscar colaboradores:', employeeError);
+      } else {
+        setEmployees(employeeData);
+      }
     }
+
+    fetchData();
   }, []);
 
-  const filteredDevices = devices.filter(device => {
+  const filteredDevices = devices.filter((device) => {
     return (
-      (typeFilter ? device.type === typeFilter : true) &&
-      (employeeFilter ? device.employee === employeeFilter : true) &&
+      (typeFilter ? device.tipo === typeFilter : true) &&
+      (employeeFilter ? device.colaborador === employeeFilter : true) &&
       (statusFilter ? device.status === statusFilter : true)
     );
   });
-/*ajustar o formato do csv para o correto*/
+
   function exportCSV() {
-    const headers = ["Tipo", "Modelo", "Patrimônio/IP", "Nome", "Status", "Colaborador", "Departamento"];
-    const rows = filteredDevices.map(d => [
-      d.type,
-      d.model,
-      d.assetNumber,
-      d.name,
+    const headers = ['Tipo', 'Modelo', 'Patrimônio/IP', 'Nome', 'Status', 'Colaborador', 'Departamento'];
+    const rows = filteredDevices.map((d) => [
+      d.tipo,
+      d.modelo,
+      d.patrimonio,
+      d.nome,
       d.status,
-      d.employee || '-',
-      d.department || '-'
+      d.colaborador,
+      d.departamento,
     ]);
     const csvContent = [headers, ...rows]
-      .map(row => row.map(cell => `"${cell}"`).join(','))
+      .map((row) => row.map((cell) => `"${cell}"`).join(','))
       .join('\n');
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -66,7 +118,7 @@ export default function Reports() {
           <h2 className="text-xl font-semibold text-gray-800">Relatórios e Consultas</h2>
           <button
             onClick={exportCSV}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2 shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
           >
             <i className="fas fa-file-export mr-2"></i> Exportar Relatório
           </button>
@@ -77,7 +129,7 @@ export default function Reports() {
             <label className="block text-sm font-medium text-gray-700 mb-1">Filtrar por Tipo</label>
             <select
               value={typeFilter}
-              onChange={e => setTypeFilter(e.target.value)}
+              onChange={(e) => setTypeFilter(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Todos</option>
@@ -88,19 +140,24 @@ export default function Reports() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Filtrar por Colaborador</label>
-            <input
-              type="text"
+            <select
               value={employeeFilter}
-              onChange={e => setEmployeeFilter(e.target.value)}
-              placeholder="Nome do colaborador"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+              onChange={(e) => setEmployeeFilter(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md"
+            >
+              <option value="">Todos</option>
+              {employees.map((e) => (
+                <option key={e.id} value={e.nome}>
+                  {e.nome}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Filtrar por Status</label>
             <select
               value={statusFilter}
-              onChange={e => setStatusFilter(e.target.value)}
+              onChange={(e) => setStatusFilter(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Todos</option>
@@ -126,18 +183,20 @@ export default function Reports() {
             <tbody className="bg-white divide-y divide-gray-200">
               {filteredDevices.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-4 text-sm text-gray-500 text-center">Nenhum registro encontrado</td>
+                  <td colSpan={7} className="px-6 py-4 text-sm text-gray-500 text-center">
+                    Nenhum registro encontrado
+                  </td>
                 </tr>
               ) : (
                 filteredDevices.map((dev) => (
                   <tr key={dev.id}>
-                    <td className="px-6 py-4 text-sm text-gray-900">{dev.type}</td>
-                    <td className="px-6 py-4 text-sm text-gray-500">{dev.model}</td>
-                    <td className="px-6 py-4 text-sm text-gray-500">{dev.assetNumber}</td>
-                    <td className="px-6 py-4 text-sm text-gray-500">{dev.name}</td>
+                    <td className="px-6 py-4 text-sm text-gray-900">{dev.tipo}</td>
+                    <td className="px-6 py-4 text-sm text-gray-500">{dev.modelo}</td>
+                    <td className="px-6 py-4 text-sm text-gray-500">{dev.patrimonio}</td>
+                    <td className="px-6 py-4 text-sm text-gray-500">{dev.nome}</td>
                     <td className="px-6 py-4 text-sm text-gray-500">{dev.status}</td>
-                    <td className="px-6 py-4 text-sm text-gray-500">{dev.employee || '-'}</td>
-                    <td className="px-6 py-4 text-sm text-gray-500">{dev.department || '-'}</td>
+                    <td className="px-6 py-4 text-sm text-gray-500">{dev.colaborador || '-'}</td>
+                    <td className="px-6 py-4 text-sm text-gray-500">{dev.departamento || '-'}</td>
                   </tr>
                 ))
               )}

@@ -128,13 +128,13 @@ export default function Devices() {
       <div className="bg-white rounded-lg shadow-md p-6 mb-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold text-gray-800">Cadastro de Periféricos</h2>
-          <button onClick={() => setShowForm(true)} className="bg-blue-600 text-white px-4 py-2 rounded-md">
+          <button onClick={() => setShowForm(true)} className="bg-blue-600 text-white px-4 py-2 rounded-md gap-2 shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105">
             Novo Periférico
           </button>
         </div>
 
         {showForm && (
-          <div className="bg-gray-100 p-4 rounded-md mb-6">
+          <div className="bg-gray-100 p-4 rounded-md mb-6 transition-all duration-300 ease-in-out animate-fade-in">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <select id="tipo" value={formData.tipo} onChange={handleChange} className="border p-2 rounded-md">
                 <option value="">Tipo</option>

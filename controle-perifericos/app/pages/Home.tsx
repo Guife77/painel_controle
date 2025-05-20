@@ -12,33 +12,50 @@ interface Device {
   patrimonio: string;
   nome: string;
   status: string;
-  colaborador_id: string; // ou number, dependendo do tipo da FK
-  employees?: {
+  colaborador_id: string;
+  employee?: {
     nome: string;
     departamento: string;
   };
 }
 
 
-export default function Home({ setPage }: Props) {
-  const [devices, setDevices] = useState<Device[]>([]);
+  export default function Home({ setPage }: Props) {
+    const [devices, setDevices] = useState<Device[]>([]);
 
-  useEffect(() => {
-    async function fetchDevices() {
+    useEffect(() => {
+      async function fetchDevices() {
       const { data, error } = await supabase
         .from('devices')
-        .select('*')
-        .order('id', { ascending: false });
+        .select(`
+          id,
+          tipo,
+          modelo,
+          patrimonio,
+          nome,
+          status,
+          colaborador_id,
+          employee:colaborador_id (
+            nome,
+            departamento
+          )
+        `)
+          .order('id', { ascending: false });
 
-      if (error) {
-        console.error('Erro ao buscar dispositivos:', error);
-      } else {
-        setDevices(data || []);
+        if (error) {
+          console.error('Erro ao buscar dispositivos:', error);
+        } else {
+          setDevices(
+            (data || []).map((d: any) => ({
+              ...d,
+              employee: Array.isArray(d.employee) ? d.employee[0] : d.employee
+            }))
+          );
+        }
       }
-    }
 
-    fetchDevices();
-  }, []);
+      fetchDevices();
+    }, []);
 
   const computerCount = devices.filter(d => d.tipo === 'Computador').length;
   const kitCount = devices.filter(d => d.tipo === 'Mouse/Teclado').length;
@@ -131,12 +148,13 @@ export default function Home({ setPage }: Props) {
                       <td className="px-6 py-4 text-sm text-gray-500" colSpan={5}>Nenhum registro encontrado</td>
                     </tr>
                   ) : (
-                    recentDevices.map((d) => (
-                      <tr key={d.id}>
+                    recentDevices.map((d, index) => (
+                      <tr key={`${d.id}-${index}`}>
                         <td className="px-6 py-4 text-sm text-gray-500">{d.tipo}</td>
                         <td className="px-6 py-4 text-sm text-gray-500">{d.modelo}</td>
                         <td className="px-6 py-4 text-sm text-gray-500">{d.patrimonio}</td>
-                        <td className="px-6 py-4 text-sm text-gray-500">{d.nome || '-'}</td>
+                        <td className="px-6 py-4 text-sm text-gray-500">{d.employee?.nome || "-"}</td>
+
                         <td className="px-6 py-4 text-sm text-gray-500">{d.status}</td>
                       </tr>
                     ))

@@ -163,6 +163,13 @@ interface Device {
               </table>
             </div>
           </div>
+          <footer className="bg-gray-100 text-center py-9 mt-5 rounded-md shadow-inner">
+            <p className="text-gray-600 text-slg">
+              <i className="fas fa-copyright"></i> 2025 - Todos os direitos reservados.
+              <br></br>
+              Produzido por <strong>Guilherme Fernandes</strong> - Empresa: <strong>ESY SYSTEMS</strong>
+            </p>
+        </footer>
         </div>
       </main>
     </div>

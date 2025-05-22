@@ -65,11 +65,8 @@ interface Device {
   return (
     <div className="flex-1 relative">
       {/* Top Bar */}
-      <header className="bg-white shadow-sm py-4 px-6 flex justify-between items-center rounded-lg">
+      <header className="bg-white shadow-sm py-4 px-10 flex justify-between items-center rounded-lg">
         <div className="flex items-center">
-          <button id="menuToggle" className="md:hidden mr-4 text-gray-600">
-            <i className="fas fa-bars"></i>
-          </button>
           <h2 id="pageTitle" className="text-xl font-semibold text-gray-800">Início</h2>
         </div>
         <div className="flex items-center">
@@ -132,7 +129,7 @@ interface Device {
           <div className="mt-6 bg-white rounded-lg shadow-md p-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">Últimos Registros</h3>
             <div className="table-container">
-              <table className="min-w-full divide-y divide-gray-200">
+              <table className="min-w-full divide-y divide-gray-200 overflow-x-auto">
                 <thead>
                   <tr>
                     <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase">Tipo</th>

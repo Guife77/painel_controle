@@ -148,7 +148,7 @@ export default function Employees() {
           </div>
         )}
 
-        <table className="min-w-full divide-y divide-gray-200">
+        <table className="min-w-full divide-y divide-gray-200 overflow-x-auto">
           <thead>
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nome</th>

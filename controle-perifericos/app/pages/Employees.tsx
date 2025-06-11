@@ -134,6 +134,12 @@ export default function Employees() {
                 <option value="Financeiro">Financeiro</option>
                 <option value="Marketing">Marketing</option>
                 <option value="Vendas">Vendas</option>
+                <option value="Logística">Logística</option>
+                <option value="Importação">Importação</option>
+                <option value="Projetos">Projetos</option>
+                <option value="Controladoria">Controladoria</option>
+                <option value="Direção">Diretoria</option>
+                <option value="Outros">Outros</option>
               </select>
             </div>
             <div className="flex justify-end mt-4">

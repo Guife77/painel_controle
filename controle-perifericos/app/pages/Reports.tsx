@@ -86,30 +86,41 @@ export default function Reports() {
     );
   });
 
-  function exportCSV() {
-    const headers = ['Tipo', 'Modelo', 'Patrimônio/IP', 'Nome', 'Status', 'Colaborador', 'Departamento'];
-    const rows = filteredDevices.map((d) => [
-      d.tipo,
-      d.modelo,
-      d.patrimonio,
-      d.nome,
-      d.status,
-      d.colaborador,
-      d.departamento,
-    ]);
-    const csvContent = [headers, ...rows]
-      .map((row) => row.map((cell) => `"${cell}"`).join(','))
-      .join('\n');
+function exportCSV() {
+  const headers = ['Tipo', 'Modelo', 'Patrimônio/IP', 'Nome', 'Status', 'Colaborador', 'Departamento'];
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'relatorio_perifericos.csv');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
+  const sanitize = (value: string | undefined | number | null) => {
+    if (typeof value === 'string') {
+      return `"${value.replace(/"/g, '""')}"`; // Escapa aspas
+    }
+    return `"${value ?? ''}"`; // Trata null como vazio
+  };
+
+  const rows = filteredDevices.map((d) => [
+    sanitize(d.tipo),
+    sanitize(d.modelo),
+    sanitize(d.patrimonio),
+    sanitize(d.nome),
+    sanitize(d.status),
+    sanitize(d.colaborador),
+    sanitize(d.departamento),
+  ]);
+
+  const BOM = '\uFEFF';
+  const csvContent = BOM + [headers.map(sanitize), ...rows]
+    .map((row) => row.join(';'))
+    .join('\n');
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', 'relatorio_perifericos.csv');
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
 
   return (
     <div className="p-6">

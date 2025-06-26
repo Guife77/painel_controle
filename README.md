@@ -12,7 +12,7 @@ Sistema web para controle e vinculação de periféricos aos colaboradores da em
 - **JavaScript** – Lógica do cliente
 - **HTML5 & CSS3** – Estrutura e estilo da aplicação
 - **TailwindCSS** – Estilização moderna e responsiva
-- **MySQL / PostgreSQL** – Banco de dados relacional (a definir)
+- **PostgreSQL** – Banco de dados relacional
 - **Prisma** (sugestão) – ORM para gerenciamento do banco
 
 ## 🎯 Objetivo
@@ -42,7 +42,23 @@ Gerenciar computadores, mouses, teclados e celulares, vinculando cada periféric
 - Exportação para CSV/Excel
 - Histórico de movimentação de periféricos
 
-## 👨‍💼 Desenvolvedor
+## 🧠 Aprendizados
 
-Projeto desenvolvido por **Gui** – ESY SYSTEMS  
-Contato: [github.com/Guife77](https://github.com/Guife77)
+Durante o desenvolvimento deste projeto, pratiquei:
+
+- Tipagem em TypeScript
+- Manipulação de DOM
+- Estruturação de componentes básicos
+- Organização de arquivos e boas práticas
+
+---
+
+## 💻 Como executar o projeto
+
+# Clone este repositório
+git clone https://github.com/Guife77/painel_controle.git
+
+# Acesse a pasta do projeto
+cd painel_controle
+
+# Abra o arquivo index.tsx no navegador

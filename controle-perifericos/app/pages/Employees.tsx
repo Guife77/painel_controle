@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 
-interface Employee {
+interface Funcionario {
   id: number;
   nome: string;
   departamento: string;
@@ -12,8 +12,8 @@ interface Employee {
   status: string;
 }
 
-export default function Employees() {
-  const [employees, setEmployees] = useState<Employee[]>([]);
+export default function Funcionarios() {
+  const [Funcionarios, setFuncionarios] = useState<Funcionario[]>([]);
   const [formData, setFormData] = useState({
     nome: '',
     departamento: '',
@@ -26,17 +26,17 @@ export default function Employees() {
   const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
-    fetchEmployees();
+    fetchFuncionarios();
   }, []);
 
-  async function fetchEmployees() {
+  async function fetchFuncionarios() {
     const { data, error } = await supabase
-      .from('employees')
+      .from('funcionarios')
       .select('*')
       .order('id', { ascending: true });
 
     if (!error && data) {
-      setEmployees(data);
+      setFuncionarios(data);
     } else {
       console.error('Erro ao carregar colaboradores:', error);
     }
@@ -59,7 +59,7 @@ export default function Employees() {
     if (editingId) {
       // Atualizar colaborador
       const { error } = await supabase
-        .from('employees')
+        .from('funcionarios')
         .update({ nome, departamento, cargo, email })
         .eq('id', editingId);
 
@@ -69,7 +69,7 @@ export default function Employees() {
     } else {
       // Inserir novo colaborador
       const { error } = await supabase
-        .from('employees')
+        .from('funcionarios')
         .insert({ nome, departamento, cargo, email });
 
       if (!error) {
@@ -80,7 +80,7 @@ export default function Employees() {
     setFormData({ nome: '', departamento: '', cargo: '', email: '' });
     setEditingId(null);
     setShowForm(false);
-    await fetchEmployees();
+    await fetchFuncionarios();
     setLoading(false);
 
     setTimeout(() => setSuccessMessage(''), 3000);
@@ -90,13 +90,13 @@ export default function Employees() {
     const confirmDelete = confirm('Deseja realmente excluir este colaborador?');
     if (!confirmDelete) return;
 
-    const { error } = await supabase.from('employees').delete().eq('id', id);
+    const { error } = await supabase.from('funcionarios').delete().eq('id', id);
     if (!error) {
-      await fetchEmployees();
+      await fetchFuncionarios();
     }
   }
 
-  function handleEdit(emp: Employee) {
+  function handleEdit(emp: Funcionario) {
     setFormData({
       nome: emp.nome,
       departamento: emp.departamento,
@@ -165,14 +165,14 @@ export default function Employees() {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {employees.length === 0 ? (
+            {Funcionarios.length === 0 ? (
               <tr>
                 <td colSpan={5} className="px-6 py-4 text-sm text-gray-500 text-center">
                   Nenhum colaborador cadastrado
                 </td>
               </tr>
             ) : (
-              employees.map(emp => (
+              Funcionarios.map(emp => (
                 <tr key={emp.id}>
                   <td className="px-6 py-4 text-sm">{emp.nome}</td>
                   <td className="px-6 py-4 text-sm">{emp.departamento}</td>

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 
-interface ReportDevice {
+interface ReportAparelho {
   id: number;
   tipo: string;
   modelo: string;
@@ -14,7 +14,7 @@ interface ReportDevice {
   departamento?: string;
 }
 
-interface Employee {
+interface Funcionarios {
   id: number;
   nome: string;
   departamento: string;
@@ -23,17 +23,17 @@ interface Employee {
 }
 
 export default function Reports() {
-  const [devices, setDevices] = useState<ReportDevice[]>([]);
-  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [aparelhos, setAparelhos] = useState<ReportAparelho[]>([]);
+  const [Funcionarios, setFuncionarios] = useState<Funcionarios[]>([]);
   const [typeFilter, setTypeFilter] = useState('');
-  const [employeeFilter, setEmployeeFilter] = useState('');
+  const [FuncionariosFilter, setFuncionariosFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
 
   useEffect(() => {
     async function fetchData() {
       // Busca dispositivos com vínculo ao colaborador
       const { data: deviceData, error: deviceError } = await supabase
-        .from('devices')
+        .from('aparelhos')
         .select(`
           id,
           tipo,
@@ -41,47 +41,47 @@ export default function Reports() {
           patrimonio,
           nome,
           status,
-          employees:colaborador_id (
+          Funcionarioss:colaborador_id (
             nome,
             departamento
           )
         `);
 
       if (deviceError) {
-        console.error('Erro ao buscar devices:', deviceError);
+        console.error('Erro ao buscar Aparelhos:', deviceError);
       } else {
-        const mappedDevices: ReportDevice[] = deviceData.map((d: any) => ({
+        const mappedAparelhos: ReportAparelho[] = deviceData.map((d: any) => ({
           id: d.id,
           tipo: d.tipo,
           modelo: d.modelo,
           patrimonio: d.patrimonio,
           nome: d.nome,
           status: d.status,
-          colaborador: d.employees?.nome || '',
-          departamento: d.employees?.departamento || '',
+          colaborador: d.Funcionarioss?.nome || '',
+          departamento: d.Funcionarioss?.departamento || '',
         }));
-        setDevices(mappedDevices);
+        setAparelhos(mappedAparelhos);
       }
 
       // Busca lista de todos os colaboradores
-      const { data: employeeData, error: employeeError } = await supabase
-        .from('employees')
+      const { data: FuncionariosData, error: FuncionariosError } = await supabase
+        .from('funcionarios')
         .select('id, nome, departamento, email, status');
 
-      if (employeeError) {
-        console.error('Erro ao buscar colaboradores:', employeeError);
+      if (FuncionariosError) {
+        console.error('Erro ao buscar colaboradores:', FuncionariosError);
       } else {
-        setEmployees(employeeData);
+        setFuncionarios(FuncionariosData);
       }
     }
 
     fetchData();
   }, []);
 
-  const filteredDevices = devices.filter((device) => {
+  const filteredAparelhos = aparelhos.filter((device) => {
     return (
       (typeFilter ? device.tipo === typeFilter : true) &&
-      (employeeFilter ? device.colaborador === employeeFilter : true) &&
+      (FuncionariosFilter ? device.colaborador === FuncionariosFilter : true) &&
       (statusFilter ? device.status === statusFilter : true)
     );
   });
@@ -96,7 +96,7 @@ function exportCSV() {
     return `"${value ?? ''}"`; // Trata null como vazio
   };
 
-  const rows = filteredDevices.map((d) => [
+  const rows = filteredAparelhos.map((d) => [
     sanitize(d.tipo),
     sanitize(d.modelo),
     sanitize(d.patrimonio),
@@ -152,12 +152,12 @@ function exportCSV() {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Filtrar por Colaborador</label>
             <select
-              value={employeeFilter}
-              onChange={(e) => setEmployeeFilter(e.target.value)}
+              value={FuncionariosFilter}
+              onChange={(e) => setFuncionariosFilter(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md"
             >
               <option value="">Todos</option>
-              {employees.map((e) => (
+              {Funcionarios.map((e) => (
                 <option key={e.id} value={e.nome}>
                   {e.nome}
                 </option>
@@ -192,14 +192,14 @@ function exportCSV() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredDevices.length === 0 ? (
+              {filteredAparelhos.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="px-6 py-4 text-sm text-gray-500 text-center">
                     Nenhum registro encontrado
                   </td>
                 </tr>
               ) : (
-                filteredDevices.map((dev) => (
+                filteredAparelhos.map((dev) => (
                   <tr key={dev.id}>
                     <td className="px-6 py-4 text-sm text-gray-900">{dev.tipo}</td>
                     <td className="px-6 py-4 text-sm text-gray-500">{dev.modelo}</td>

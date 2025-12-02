@@ -26,7 +26,7 @@ interface Device {
     useEffect(() => {
       async function fetchDevices() {
       const { data, error } = await supabase
-        .from('devices')
+        .from('aparelhos')
         .select(`
           id,
           tipo,

@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
 
-interface Device {
+interface Aparelhos {
   id: number;
   tipo: string;
   modelo: string;
@@ -16,15 +16,15 @@ interface Device {
   departamento?: string;
 }
 
-interface Employee {
+interface Funcionarios {
   id: number;
   nome: string;
   departamento: string;
 }
 
-export default function Devices() {
-  const [devices, setDevices] = useState<Device[]>([]);
-  const [employees, setEmployees] = useState<Employee[]>([]);
+export default function Aparelhos() {
+  const [devices, setAparelhos] = useState<Aparelhos[]>([]);
+  const [Funcionarios, setFuncionarios] = useState<Funcionarios[]>([]);
   const [formData, setFormData] = useState({
     tipo: '',
     modelo: '',
@@ -37,13 +37,13 @@ export default function Devices() {
   const [editingId, setEditingId] = useState<number | null>(null);
 
   useEffect(() => {
-    fetchEmployees();
-    fetchDevices();
+    fetchFuncionarios();
+    fetchAparelhos();
   }, []);
 
-  async function fetchDevices() {
+  async function fetchAparelhos() {
     const { data, error } = await supabase
-      .from('devices')
+      .from('aparelhos')
       .select(`
         id,
         tipo,
@@ -67,15 +67,15 @@ export default function Devices() {
         colaborador_nome: d.employees?.nome,
         departamento: d.employees?.departamento
       }));
-      setDevices(mapped);
+      setAparelhos(mapped);
     }
 
-    if (error) console.error('Erro ao carregar devices:', error);
+    if (error) console.error('Erro ao carregar aparelhos:', error);
   }
 
-  async function fetchEmployees() {
-    const { data, error } = await supabase.from('employees').select('id, nome, departamento');
-    if (data) setEmployees(data);
+  async function fetchFuncionarios() {
+    const { data, error } = await supabase.from('funcionarios').select('id, nome, departamento');
+    if (data) setFuncionarios(data);
     if (error) console.error('Erro ao carregar colaboradores:', error);
   }
 
@@ -92,25 +92,25 @@ export default function Devices() {
     }
 
     if (editingId) {
-      await supabase.from('devices').update({ tipo, modelo, patrimonio, nome, status, colaborador_id }).eq('id', editingId);
+      await supabase.from('aparelhos').update({ tipo, modelo, patrimonio, nome, status, colaborador_id }).eq('id', editingId);
     } else {
-      await supabase.from('devices').insert({ tipo, modelo, patrimonio, nome, status, colaborador_id });
+      await supabase.from('aparelhos').insert({ tipo, modelo, patrimonio, nome, status, colaborador_id });
     }
 
     setFormData({ tipo: '', modelo: '', patrimonio: '', nome: '', status: 'Ativo', colaborador_id: 0 });
     setEditingId(null);
     setShowForm(false);
-    fetchDevices();
+    fetchAparelhos();
   }
 
   async function handleDelete(id: number) {
     if (confirm('Deseja excluir este periférico?')) {
-      await supabase.from('devices').delete().eq('id', id);
-      fetchDevices();
+      await supabase.from('aparelhos').delete().eq('id', id);
+      fetchAparelhos();
     }
   }
 
-  function handleEdit(dev: Device) {
+  function handleEdit(dev: Aparelhos) {
     setFormData({
       tipo: dev.tipo,
       modelo: dev.modelo,
@@ -151,7 +151,7 @@ export default function Devices() {
               </select>
               <select id="colaborador_id" value={formData.colaborador_id} onChange={handleChange} className="border p-2 rounded-md">
                 <option value={0}>Selecione o colaborador</option>
-                {employees.map(e => (
+                {Funcionarios.map(e => (
                   <option key={e.id} value={e.id}>{e.nome}</option>
                 ))}
               </select>

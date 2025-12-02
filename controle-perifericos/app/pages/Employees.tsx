@@ -129,17 +129,20 @@ export default function Funcionarios() {
               <input id="email" type="email" value={formData.email} onChange={handleChange} placeholder="E-mail" className="border p-2 rounded-md" />
               <select id="departamento" value={formData.departamento} onChange={handleChange} className="border p-2 rounded-md">
                 <option value="">Selecione o departamento</option>
-                <option value="TI">TI</option>
+                <option value="CUSTO">CUSTO</option>
+                <option value="DIRETORIA">DIRETORIA</option>
+                <option value="FINANCEIRO">FINANCEIRO</option>
+                <option value="FISCAL">FISCAL</option>
+                <option value="FATURAMENTO">FATURAMENTO</option>
+                <option value="IMPORTAÇÃO">IMPORTAÇÃO</option>
+                <option value="LOGÍSTICA">LOGÍSTICA</option>
+                <option value="MARKETING">MARKETING</option>
+                <option value="PROJETOS">PROJETOS</option>
+                <option value="QUALIDADE/REGULATORIO">COMPRAS</option>
                 <option value="RH">RH</option>
-                <option value="Financeiro">Financeiro</option>
-                <option value="Marketing">Marketing</option>
-                <option value="Vendas">Vendas</option>
-                <option value="Logística">Logística</option>
-                <option value="Importação">Importação</option>
-                <option value="Projetos">Projetos</option>
-                <option value="Controladoria">Controladoria</option>
-                <option value="Direção">Diretoria</option>
-                <option value="Outros">Outros</option>
+                <option value="TI">TI</option>
+                <option value="VENDAS">VENDAS</option>
+                <option value="OUTROS">OUTROS</option>
               </select>
             </div>
             <div className="flex justify-end mt-4">

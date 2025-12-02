@@ -184,10 +184,10 @@ function InfoCard({ title, icon, count }: { title: string; icon: string; count: 
       </div>
       <div className="flex items-end">
         <span className="text-3xl font-bold text-gray-800">{count}</span>
-        <span className="text-gray-500 ml-2">/ 20 disponíveis</span>
+        <span className="text-gray-500 ml-2">/ 28 disponíveis</span>
       </div>
       <div className="mt-4 bg-gray-200 h-2 rounded-full">
-        <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${(count / 20) * 100}%` }}></div>
+        <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${(count / 28) * 100}%` }}></div>
       </div>
     </div>
   );

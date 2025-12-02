@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Controle de Periféricos (painel_controle)
 
-## Getting Started
+Aplicação Next.js criada com `create-next-app` para gerenciar um painel de controle de periféricos.
 
-First, run the development server:
+## Requisitos
+- Node.js 16+ (recomendado)
+- npm, yarn, pnpm ou bun
 
+## Instalação
+1. Instale dependências:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+# ou
+yarn
+# ou
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Desenvolvimento
+Execute o servidor de desenvolvimento:
+```bash
+npm run dev
+# ou
+yarn dev
+# ou
+pnpm dev
+# ou
+bun dev
+```
+Abra http://localhost:3000 no navegador. Edite a página inicial em `app/page.tsx` (o Next atualiza automaticamente).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build e produção
+Gerar build e executar:
+```bash
+npm run build
+npm run start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scripts comuns
+- dev — servidor de desenvolvimento
+- build — compilar para produção
+- start — executar build compilado
+- lint — checar estilo/erros (se configurado)
 
-## Learn More
+## Estrutura sugerida
+- app/ — rotas e páginas (Next.js App Router)
+- components/ — componentes React reutilizáveis
+- public/ — ativos estáticos (imagens, favicon)
+- styles/ — estilos globais / módulos
+- package.json, README.md, tsconfig.json, etc.
 
-To learn more about Next.js, take a look at the following resources:
+## Testes e qualidade
+Adicionar e executar testes de unidade/integração conforme o projeto (ex.: Jest, Vitest). Habilite linter/formatter (ESLint, Prettier) conforme necessário.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploy
+Deploy recomendado: Vercel (integração nativa com Next.js). Consulte a documentação do Next.js para outras opções de hospedagem.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Contribuição
+Abra issues e PRs com descrições claras. Mantenha commits concisos e siga o padrão de código do projeto.
 
-## Deploy on Vercel
+## Licença
+Verifique o arquivo LICENSE no repositório ou adicione uma licença apropriada.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Observação: este README é uma versão enxuta e genérica. Para instruções específicas do projeto, inclua detalhes de configurações, variáveis de ambiente e dependências adicionais presentes no repositório.

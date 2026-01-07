@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { useRef } from 'react';
 
 interface Funcionario {
   id: number;
@@ -95,7 +96,7 @@ export default function Funcionarios() {
       await fetchFuncionarios();
     }
   }
-
+  const formRef = useRef<HTMLDivElement | null>(null);
   function handleEdit(emp: Funcionario) {
     setFormData({
       nome: emp.nome,
@@ -105,7 +106,15 @@ export default function Funcionarios() {
     });
     setEditingId(emp.id);
     setShowForm(true);
+
+    setTimeout(() => {
+    formRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }, 100);
   }
+
 
   return (
     <div className="p-6">
@@ -121,7 +130,9 @@ export default function Funcionarios() {
         </div>
 
         {showForm && (
-          <div className="bg-gray-50 p-6 rounded-lg mb-6 transition-all duration-300 ease-in-out animate-fade-in">
+          <div 
+           ref= {formRef} 
+            className="bg-gray-50 p-6 rounded-lg mb-6 transition-all duration-300 ease-in-out animate-fade-in">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">{editingId ? 'Editar Colaborador' : 'Novo Colaborador'}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input id="nome" value={formData.nome} onChange={handleChange} placeholder="Nome" className="border p-2 rounded-md" />
@@ -138,7 +149,7 @@ export default function Funcionarios() {
                 <option value="LOGÍSTICA">LOGÍSTICA</option>
                 <option value="MARKETING">MARKETING</option>
                 <option value="PROJETOS">PROJETOS</option>
-                <option value="QUALIDADE/REGULATORIO">COMPRAS</option>
+                <option value="QUALIDADE/REGULATORIO">QUALIDADE/REGULATORIO</option>
                 <option value="RH">RH</option>
                 <option value="TI">TI</option>
                 <option value="VENDAS">VENDAS</option>

@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
+import { useRef } from 'react';
 
 interface Aparelhos {
   id: number;
@@ -109,7 +110,7 @@ export default function Aparelhos() {
       fetchAparelhos();
     }
   }
-
+  const formRef = useRef<HTMLDivElement | null>(null);
   function handleEdit(dev: Aparelhos) {
     setFormData({
       tipo: dev.tipo,
@@ -121,6 +122,12 @@ export default function Aparelhos() {
     });
     setEditingId(dev.id);
     setShowForm(true);
+    setTimeout(() => {
+      formRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }, 100);
   }
 
   return (
@@ -134,7 +141,9 @@ export default function Aparelhos() {
         </div>
 
         {showForm && (
-          <div className="bg-gray-100 p-4 rounded-md mb-6 transition-all duration-300 ease-in-out animate-fade-in">
+          <div 
+          ref={formRef}
+          className="bg-gray-100 p-4 rounded-md mb-6 transition-all duration-300 ease-in-out animate-fade-in">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <select id="tipo" value={formData.tipo} onChange={handleChange} className="border p-2 rounded-md">
                 <option value="">Tipo</option>
